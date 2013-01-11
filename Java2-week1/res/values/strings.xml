@@ -1,0 +1,39 @@
+<resources>
+
+    <string name="app_name">Buy Best Specials</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">BuyBest</string>
+    
+    <string name="p1_sku">9333027</string>
+    <string name="p1_name">Garmin 1300T GPS</string>
+    <string name="p1_desc">Preloaded base map coverage of lower 48 United States, Hawaii and Puerto Rico - 4.3" display - FM traffic receiver</string>
+    <string name="p1_price">$  89.99</string>
+    <string name="p1_link"><![CDATA[http://www.bestbuy.com/site/Garmin+-+n%FCvi+1300T+4.3%22+GPS+with+Lifetime+Traffic+Updates/9333027.p?id=1218086489033&skuId=9333027&cmp=RMX&ky=2ef3Hj185LDROE8gdYk2ZeYwVcTYgFbZH]]></string>
+    
+    <string name="p2_sku">6882588</string>
+    <string name="p2_name">Samsung Laptop</string>
+    <string name="p2_desc">15.6" Laptop - 4GB Memory - 500GB Hard Drive - Black</string>
+    <string name="p2_price">$ 369.99</string>
+    <string name="p2_link"><![CDATA[http://www.bestbuy.com/site/Samsung+-+15.6%22+Laptop+-+4GB+Memory+-+500GB+Hard+Drive+-+Black/6882588.p?id=1218810329526&skuId=6882588&cmp=RMX&ky=2ef3Hj185LDROE8gdYk2ZeYwVcTYgFbZH]]></string>
+    
+    <string name="p3_sku">4811263</string>
+    <string name="p3_name">Sony HDRCX210 Camcorder</string>
+    <string name="p3_desc">8GB Flash memory - 25x Optical Zoom - SteadyShot image stabilization</string>
+    <string name="p3_price">$ 349.99</string>
+    <string name="p3_link"><![CDATA[http://www.bestbuy.com/site/Sony+-+HDRCX210+8GB+HD+Flash+Memory+Camcorder+-+Black/4811263.p?id=1218533333109&skuId=4811263&cmp=RMX&ky=2ef3Hj185LDROE8gdYk2ZeYwVcTYgFbZH]]></string>
+    
+    <string name="p4_sku">3176102</string>
+    <string name="p4_name">Nikon Coolpix AW100</string>
+    <string name="p4_desc">Orange 16.0 Megapixel camera - 5x Optical/4x Digital Zoom</string>
+    <string name="p4_price">$ 199.99</string>
+    <string name="p4_link"><![CDATA[http://www.bestbuy.com/site/Nikon+-+Coolpix+AW100+Orange+16.0-Megapixel+Digital+Camera+-+Orange/3176102.p?id=1218382960829&skuId=3176102&cmp=RMX&ky=2ef3Hj185LDROE8gdYk2ZeYwVcTYgFbZH]]></string>
+    
+    <string name="p5_sku">5764341</string>
+    <string name="p5_name">Westinghouse 46" HDTV</string>
+    <string name="p5_desc">46" LED 1080p 120Hz HDTV - Energy Star Certified</string>
+    <string name="p5_price">$ 379.99</string>
+    <string name="p5_link"><![CDATA[http://www.bestbuy.com/site/Westinghouse+-+46%22+Class+-+LED+-+1080p+-+120Hz+-+HDTV/5764341.p?id=1218692161372&skuId=5764341&cmp=RMX&ky=2ef3Hj185LDROE8gdYk2ZeYwVcTYgFbZH]]></string>
+   
+
+</resources>
