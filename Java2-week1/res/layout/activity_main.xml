@@ -8,19 +8,20 @@
     <LinearLayout 
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:id="@+id/truck"
+        android:id="@+id/akapapaj"
         android:layout_height="wrap_content" 
         android:orientation="vertical"
         android:focusableInTouchMode="true"
         android:background="#000000">  
     </LinearLayout>
-    <ListView android:layout_width="fill_parent"
+    <ListView
+        android:id="@+id/mainListView" 
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        
-        android:background="#660000"
-        android:textColor="#ffffff"
-        android:id="@+id/mainListView">
-    </ListView>
+        android:background="#0000f4"
+        android:divider="#b5b5b5"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/list_selector" /> 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -6,41 +6,49 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
 
+/*
+ *  Author: Joseph Malone akaPapaJ
+ *  Class:  Java 2 - Week 1
+ *  Instructor: Josh Donlan
+ *  Date: January 09, 2013
+ */
 public class DetailView extends Activity {
 	String myUrl;
 	String mydet;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.second);
-		
+
 		TextView tv = (TextView) findViewById(R.id.textView1);
-		
+
 		Intent i = getIntent();
 		final String[] details = i.getStringArrayExtra("product");
-		
-		for(int k=0; k<4; k++){
+
+		for (int k = 0; k < 4; k++) {
 			mydet = details[k];
-			
+
 			tv.append(mydet);
-		
+
 		}
 		mydet = details[4];
 		myUrl = mydet;
 		Log.i("myUrl", myUrl);
 		Button b;
 		b = (Button) findViewById(R.id.button1);
-		b.setOnClickListener(new OnClickListener(){
-			
+		b.setOnClickListener(new OnClickListener() {
+
 			@Override
-			public void onClick(View v){
+			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(myUrl));
 				startActivity(i);
+				setResult(1);
 			}
 		});
 	}
