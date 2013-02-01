@@ -1,31 +1,22 @@
 package com.akapapaj.java2_proj2;
 
-import android.app.Activity;
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
-public class DetailsActivity extends Activity {
+public class DetailsActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.details_fragment);
 
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			// not supporting landscape orientation in mobile devices still will
-			// in tablets
-			// finish();
-			DetailsFragment details = new DetailsFragment();
-			details.setArguments(getIntent().getExtras());
-			getFragmentManager().beginTransaction()
-					.add(android.R.id.content, details).commit();
-			return;
-		}
-		if (savedInstanceState == null) {
-			// get details fragment during setup
-			DetailsFragment details = new DetailsFragment();
-			details.setArguments(getIntent().getExtras());
-			setResult(1);
-			getFragmentManager().beginTransaction()
-					.add(android.R.id.content, details).commit();
-		}
+		Intent launchingIntent = getIntent();
+		String content = launchingIntent.getData().toString();
+
+		DetailsFragment viewer = (DetailsFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.details_fragment);
+
+		viewer.updateUrl(content);
+
 	}
 }

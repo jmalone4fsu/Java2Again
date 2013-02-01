@@ -1,112 +1,101 @@
 package com.akapapaj.java2_proj2;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.Intent;
-import android.os.Build;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-public class ProductsFragment extends ListFragment {
-	boolean isDualPane;
-	int checkPosition = 0;
-	int requestCode;
+import com.akapapaj.java2_proj2.data.PapaProvider;
+import com.akapapaj.java2_proj2.data.PapasDatabase;
+import com.akapapaj.java2_proj2.service.ItemsDownloaderService;
+
+public class ProductsFragment extends ListFragment implements
+		LoaderManager.LoaderCallbacks<Cursor> {
+	private OnItemSelectedListener itemSelectedListener;
+	private SimpleCursorAdapter adapter;
+	private static final int ITEMS_LIST_LOADER = 0x01;
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
 
-		// Check that build version Honeycomb or higher
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-			// list using static array of products
-			setListAdapter(new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_1, getResources()
-							.getStringArray(R.array.products_array)));
+		String[] uiBindFrom = { PapasDatabase.COL_ITEMNAME };
+		int[] uiBindTo = { R.id.title };
+		getLoaderManager().initLoader(ITEMS_LIST_LOADER, null, this);
+		adapter = new SimpleCursorAdapter(
+				getActivity().getApplicationContext(), R.layout.list_item,
+				null, uiBindFrom, uiBindTo,
+				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		setListAdapter(adapter);
 
-		} else {
-			setListAdapter(new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_activated_1,
-					getResources().getStringArray(R.array.products_array)));
-		}
-		// Check to see if we have a frame in which to embed the details
-		// fragment directly in the containing UI.
-		View detailsFrame = getActivity().findViewById(R.id.details);
-		isDualPane = detailsFrame != null
-				&& detailsFrame.getVisibility() == View.VISIBLE;
-
-		if (savedInstanceState != null) {
-			// restore state for last checked position
-			checkPosition = savedInstanceState.getInt("curChoice", 0);
-		}
-		if (isDualPane) {
-			// in dual pane, the list view will highlight a selected item
-			getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-			showDetails(checkPosition);
-		}
 	}
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt("curChoice", checkPosition);
+	public void onClick(View v) {
+		Intent intent = new Intent(getActivity().getApplicationContext(),
+				ItemsDownloaderService.class);
+		intent.setData(Uri
+				.parse("http://www.geek.com/articles/apple-picks/feed?format=xml"));
+		getActivity().startService(intent);
+	}
+
+	public interface OnItemSelectedListener {
+		public void onItemSelected(String itemUrl);
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		showDetails(position);
-	}
-
-	/**
-	 * Helper method to show the details of a selected item. Either it will
-	 * display a fragment in the current UI (if landscape) or start a new
-	 * activity to display it.
-	 */
-	void showDetails(int index) {
-		checkPosition = index;
-
-		if (isDualPane) {
-			getListView().setItemChecked(index, true);
-
-			// check what fragment is currently being shown, replace if needed
-			DetailsFragment details = (DetailsFragment) getActivity()
-					.getFragmentManager().findFragmentById(R.id.details);
-			if (details == null || details.getShownIndex() != index) {
-				// make new fragment to show this selection
-				details = DetailsFragment.newInstance(index);
-
-				// execute a transaction, replacing any existing fragment
-				// with this one.
-				FragmentTransaction ft = getActivity().getFragmentManager()
-						.beginTransaction();
-				ft.replace(R.id.details, details);
-				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				ft.commit();
-			}
-		} else {
-			// launch new activity to display fragment with selected text
-			Intent intent = new Intent();
-			intent.setClass(getActivity(), DetailsActivity.class);
-			intent.putExtra("index", index);
-			// startActivity(intent);
-			startActivityForResult(intent, requestCode);
+		String projection[] = { PapasDatabase.COL_URL };
+		Cursor itemCursor = getActivity().getContentResolver().query(
+				Uri.withAppendedPath(PapaProvider.CONTENT_URI,
+						String.valueOf(id)), projection, null, null, null);
+		if (itemCursor.moveToFirst()) {
+			String itemUrl = itemCursor.getString(0);
+			itemSelectedListener.onItemSelected(itemUrl);
 		}
+		itemCursor.close();
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		Activity activity = getActivity();
-		if (resultCode == 1) {
-			Log.i("Intent Result", "worked");
-			Toast.makeText(activity, "It Worked!", Toast.LENGTH_LONG).show();
-		} else {
-			Log.i("Intent Result", "didn't work");
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			itemSelectedListener = (OnItemSelectedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ "must implement OnItemSelectedListener");
 		}
 	}
 
+	// Methods for LoaderManager.LoaderCallbacks //
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		String[] projection = { PapasDatabase.ID, PapasDatabase.COL_ITEMNAME };
+		CursorLoader cursorLoader = new CursorLoader(getActivity(),
+				PapaProvider.CONTENT_URI, projection, null, null, null);
+
+		return cursorLoader;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		adapter.swapCursor(cursor);
+
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		adapter.swapCursor(null);
+
+	}
 }
