@@ -1,10 +1,15 @@
 package com.akapapaj.j_browser;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,7 +33,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			buttBack = Menu.FIRST + 104, buttFwd = Menu.FIRST + 105,
 			buttLoad = Menu.FIRST + 106, buttStop = Menu.FIRST + 107,
 			buttGo = Menu.FIRST + 108;
-	String j_PageName = "http://www.google.com";
+	String j_PageName;
 	int j_HTMLsize = 0;
 	WebView j_web;
 	EditText j_addr;
@@ -39,13 +44,20 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/**
-		 * // Get the intent that started the activity and it's data // Intent
-		 * Intent intent = getIntent(); String data =
-		 * intent.getData().toString();
-		 * 
-		 * j_PageName = data; Log.e("data", j_PageName);
-		 **/
+
+		// Get the intent that started the activity and it's data // Intent
+		Intent intent = getIntent();
+		Uri data = intent.getData();
+
+		URL url = null;
+		try {
+			url = new URL(data.getScheme(), data.getHost(), data.getPath());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		j_PageName = url.toString();
+
 		// I decided that I would try out making my Relative Layout UI
 		// programmically instead of all in the xml file //
 

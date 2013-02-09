@@ -23,6 +23,7 @@
             <intent-filter>
                 <action android:name="com.akapapaj.j_browser.LAUNCH_TEST" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
             </intent-filter>
         </activity>
     </application>
